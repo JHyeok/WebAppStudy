@@ -27,5 +27,6 @@ module.exports = function() {
 
     require('../app/routes/index.server.routes.js')(app);
     app.use(express.static('./static'));
+    // escape pathspec error 해결 후 올리는 test commit 입니다.
     return app;
 };
