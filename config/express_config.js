@@ -17,8 +17,9 @@ module.exports = function() {
     }
 
     app.use(bodyParser.urlencoded({
-        extended : true
+        extended : false
     }));
+    //{ type: 'application/vnd.api+json' }
     app.use(bodyParser.json());
     app.use(methodOverride());
 
@@ -34,6 +35,7 @@ module.exports = function() {
     app.set('view engine', 'ejs');
 
     require('../app/routes/index.server.routes.js')(app);
+    require('../app/routes/users.server.routes.js')(app);
     app.use(express.static('./static'));
     return app;
 };

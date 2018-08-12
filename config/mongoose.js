@@ -8,5 +8,6 @@ module.exports = function() {
         }).catch(() => {
             console.log('Conntection to database failed.')
         });
+    require('../app/models/user.server.model.js');
     return db;
 }
