@@ -6,10 +6,13 @@ const mongoose = require('./config/mongoose');
 
 const db = mongoose();
 
-if (db.then((res) => {
+db.then((res) => {
+    // 응답완료 app start
     const app = express();
     app.listen(5000);
-    module.exports = app;
-    
     console.log('Server running at localhost');
-}));
+    }).catch(() => {
+    // 응답실패
+    console.log('Server error');
+    });
+    
