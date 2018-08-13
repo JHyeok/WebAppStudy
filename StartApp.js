@@ -9,7 +9,7 @@ const db = mongoose();
 db.then((res) => {
     // 응답완료 app start
     const app = express();
-    app.listen(5000);
+    app.listen(3000);
     console.log('Server running at localhost');
     }).catch(() => {
     // 응답실패
