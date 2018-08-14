@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const PostSchema = new Schema({
-    title:{
+const BookSchema = new Schema({
+    title : {
         type : String,
         required : true
     },
-    content:{
+    content : {
         type : String,
         required : true
     },
@@ -14,11 +14,11 @@ const PostSchema = new Schema({
         type : Date,
         default : Date.now
     },
-    author:{
-        type:Schema.ObjectId,
-        ref:'User'
+    author : {
+        type : Schema.Types.ObjectId,
+        ref : 'User'
     }
 });
 
-PostSchema.set('toJSON', {getters : true, virtual : true});
-mongoose.model('Post', PostSchema);
+BookSchema.set('toJSON', {getters : true, virtual : true});
+mongoose.model('Book', BookSchema);

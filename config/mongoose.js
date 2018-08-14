@@ -9,5 +9,6 @@ module.exports = function() {
             console.log('Conntection to database failed.')
         });
     require('../app/models/user.server.model.js');
+    require('../app/models/book.server.model.js');
     return db;
 }
