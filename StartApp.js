@@ -5,14 +5,16 @@ const express = require('./config/express_config.js');
 const mongoose = require('./config/mongoose');
 
 const db = mongoose();
+const startapp = async () => {
+    try {
+        await db;
+        const app = express();
+        app.listen(3000);
+        console.log('Server running at localhost:3000');
+    } catch (err) {
+        console.log('server error');
+        console.log(err);
+    }
+}
 
-db.then((res) => {
-    // 응답완료 app start
-    const app = express();
-    app.listen(3000);
-    console.log('Server running at localhost');
-    }).catch(() => {
-    // 응답실패
-    console.log('Server error');
-    });
-    
+startapp();
