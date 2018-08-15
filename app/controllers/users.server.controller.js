@@ -56,26 +56,18 @@ exports.update = async (req, res) => {
     }
 };
 
-exports.delete = async (req, res, next) => {
+exports.delete = async (req, res) => {
     try {
-        let userDelete = await req.user.remove();
+        let userDelete = await User.findByIdAndRemove(req.user.id);
         if(!userDelete) {
-            return res.status(404).send('업데이트 오류입니다. (' + req.params.userId + ')');
+            return res.status(404).send('삭제 오류입니다. (' + req.params.userId + ')');
         } else {
-            res.status(204).send('유저가 성공적으로 삭제되었습니다.');
+            res.status(200).send({respone:'유저(' + req.params.userId + ')가 성공적으로 삭제되었습니다.'});
         }
     } catch (err) {
         if(err.name === 'MongoError' && err.code === 11000) {
             res.status(409).send(err.message);
         }
-        res.status(500).send('서버 오류입니다. 업데이트 할 수 없습니다. (' + req.params.userId + ')');
+        res.status(500).send('서버 오류입니다. 삭제 할 수 없습니다. (' + req.params.userId + ')');
     }
-    /*
-    req.user.remove(function(err) {
-        if (err) {
-            return next(err);
-        } else {
-            res.json(req.user);
-        }
-    });*/
 };
