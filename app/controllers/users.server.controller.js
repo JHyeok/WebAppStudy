@@ -1,60 +1,81 @@
 const User = require('mongoose').model('User');
 
-exports.create = function(req, res, next) {
+exports.create = async (req, res) => {
     const user = new User(req.body);
 
-    user.save(function(err) {
-        if (err) {
-            return next(err);
-        } else {
-            res.json(user);
+    try {
+        let newUser = await user.save();
+        res.set('Location', 'http://localhost:3000/users/' + newUser.userid);
+        res.status(201).send({respone:'users created for userid : ' + newUser.userid});
+    } catch (err) {
+        if(err.name === 'MongoError' && err.code === 11000) {
+            res.status(409).send(err.message);
         }
-    });
+        res.status(500).send(err);
+    }
 };
 
-exports.list = function(req, res, next) {
-    User.find(function(err, users) {
-        if (err) {
-            return next(err);
-        } else {
-            res.json(users);
-        }
-    });
+exports.list = async (req, res) => {
+    try  {
+        let userlist = await User.find();
+        res.json(userlist);
+    } catch (err) {
+        return res.status(500).send(err);
+    }
 };
 
 exports.read = function(req, res) {
     res.json(req.user);
 };
 
-exports.userByuserId = function(req, res, next, id) {
-    User.findOne({
-        userid : id
-    }, function(err, user) {
-        if (err) {
-            return next(err);
-        } else {
-            req.user = user;
-            next();
-        }
-    });
+exports.userByuserId = async (req, res, next, id) => {
+    try {
+        let userInfo = await User.findOne({
+            userid : id
+        });
+        req.user = userInfo;
+        next();
+    } catch (err) {
+        return next(err);
+    }
 };
 
-exports.update = function(req, res, next) {
-    User.findByIdAndUpdate(req.user.id, req.body, function(err, user) {
-        if (err) {
-            return next(err);
+exports.update = async (req, res) => {
+    try {
+        let userUpdate = await User.findByIdAndUpdate(req.user.id, req.body);
+        if(!userUpdate) {
+            return res.status(404).send('업데이트 오류입니다. (' + req.params.userId + ')');
         } else {
-            res.json(req.user);
+            res.status(200).send(userUpdate);
         }
-    });
+    } catch (err) {
+        if(err.name === 'MongoError' && err.code === 11000) {
+            res.status(409).send(err.message);
+        }
+        res.status(500).send('서버 오류입니다. 업데이트 할 수 없습니다. (' + req.params.userId + ')');
+    }
 };
 
-exports.delete = function(req, res, next) {
+exports.delete = async (req, res, next) => {
+    try {
+        let userDelete = await req.user.remove();
+        if(!userDelete) {
+            return res.status(404).send('업데이트 오류입니다. (' + req.params.userId + ')');
+        } else {
+            res.status(204).send('유저가 성공적으로 삭제되었습니다.');
+        }
+    } catch (err) {
+        if(err.name === 'MongoError' && err.code === 11000) {
+            res.status(409).send(err.message);
+        }
+        res.status(500).send('서버 오류입니다. 업데이트 할 수 없습니다. (' + req.params.userId + ')');
+    }
+    /*
     req.user.remove(function(err) {
         if (err) {
             return next(err);
         } else {
             res.json(req.user);
         }
-    });
+    });*/
 };
