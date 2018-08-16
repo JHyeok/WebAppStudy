@@ -5,6 +5,7 @@ const bodyParser = require('body-parser'); //body-parser : 요청 데이터의 �
 const methodOverride = require('method-override'); //method-override : DELETE, PUT 등과 같이 HTTP 동사 지원 기능
 const config = require('./config');
 const session = require('express-session');
+const passport = require('passport');
 
 module.exports = function() {
     const app = express();
@@ -33,6 +34,9 @@ module.exports = function() {
     app.set('views', './app/views');
     // view temlate 으로 ejs 형식 사용
     app.set('view engine', 'ejs');
+
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     require('../app/routes/index.server.routes.js')(app);
     require('../app/routes/users.server.routes.js')(app);
