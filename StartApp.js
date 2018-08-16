@@ -6,12 +6,13 @@ const mongoose = require('./config/mongoose');
 const passport = require('./config/passport');
 
 const db = mongoose();
-const auth = passport();
 const startapp = async () => {
     try {
         await db;
         const app = express();
+        const auth = passport();
         app.listen(3000);
+        module.exports = app;
         console.log('Server running at localhost:3000');
     } catch (err) {
         console.log('server error');

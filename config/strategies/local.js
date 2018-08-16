@@ -7,6 +7,7 @@ module.exports = () => {
         User.findOne({
             userid : username
         }, (err, user) => {
+            console.log(user);
             if (err) {
                 return done(err);
             }

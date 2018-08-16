@@ -6,6 +6,7 @@ const methodOverride = require('method-override'); //method-override : DELETE, P
 const config = require('./config');
 const session = require('express-session');
 const passport = require('passport');
+const flash = require('connect-flash');
 
 module.exports = function() {
     const app = express();
@@ -35,6 +36,7 @@ module.exports = function() {
     // view temlate 으로 ejs 형식 사용
     app.set('view engine', 'ejs');
 
+    app.use(flash());
     app.use(passport.initialize());
     app.use(passport.session());
 

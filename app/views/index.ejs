@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <title>
+            <%= title %>
+        </title>
     </head>
     <body>
+        <% if(username) { %>
+        <h2>Hello <%=username %></h2>
+        <a href="/logout">로그아웃</a>
+        <% } else { %>
+        <a href="/signup">회원가입</a>
+        <a href="/login">로그인</a>
+        <% } %>
+        <br />
         <img src="images/bonobono.jpg" alt="logo">
-        <h1><%= title %></h1>
     </body>
 </html>

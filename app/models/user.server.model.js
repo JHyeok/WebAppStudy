@@ -3,12 +3,7 @@ const crypto = require('crypto');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    username : {
-        type : String,
-        trim : true,
-        unique : true,
-        required : true
-    },
+    username : String,
     userid : {
         type : String,
         unique : true,
@@ -35,7 +30,7 @@ const UserSchema = new Schema({
     providerData : {},
     email : {
         type : String,
-        match : [/.+\@.+@..+/, "유효한 전자메일 주소를 기입하십시오."]
+        match : [/.+\@.+\..+/, "유효한 전자메일 주소를 기입하십시오."]
     },
     created : {
         type : Date,
@@ -78,7 +73,7 @@ UserSchema.methods.hashpassword = (password) => {
     return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
 };
 
-UserSchema.method.authenticate = (password) => {
+UserSchema.methods.authenticate = (password) => {
     return this.password === this.hashpassword(passwrod);
 };
 
@@ -100,7 +95,6 @@ UserSchema.statics.findUniqueUserid = (userid, suffix, callback) => {
         }
     });
 };
-
 
 UserSchema.set('toJSON', {getters : true, virtual : true});
 mongoose.model('User', UserSchema);

@@ -1,5 +1,5 @@
 const Book = require('mongoose').model('Book');
-const User = require('mongoose').model('User');
+// const User = require('mongoose').model('User');
 
 exports.create = function(req, res, next) {
     const book = new Book(req.body);
