@@ -60,24 +60,23 @@ UserSchema.virtual('idname').get(function() {
     return this.userid + '' + this.username;
 });
 
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function (next) {
     if (this.password) {
-        this.salt = new Buffer(crypto.randomBytes(16).toString('base64'),
-    'base64');
+        this.salt = crypto.randomBytes(16).toString('base64')
     this.password = this.hashpassword(this.password);
     }
     next();
 });
 
-UserSchema.methods.hashpassword = (password) => {
-    return crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');
+UserSchema.methods.hashpassword = function (password) {
+    return crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha256').toString('base64');
 };
 
-UserSchema.methods.authenticate = (password) => {
-    return this.password === this.hashpassword(passwrod);
+UserSchema.methods.authenticate = function (password) {
+    return this.password === this.hashpassword(password);
 };
 
-UserSchema.statics.findUniqueUserid = (userid, suffix, callback) => {
+UserSchema.statics.findUniqueUserid = function (userid, suffix, callback) {
     let _this = this;
     let possibleUserid = userid + (suffix || '');
     
