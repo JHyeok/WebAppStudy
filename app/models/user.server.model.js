@@ -36,20 +36,6 @@ const UserSchema = new Schema({
         type : Date,
         default : Date.now
     },
-    website : {
-        type : String,
-        get : function(url) {
-            if(!url) {
-                return url;
-            } else {
-                if (url.indexOf('http://') !== 0 && url.indexOf('https://') !== 0) {
-                    url = 'http://' + url;
-                }
-    
-                return url;
-            }
-        }
-    },
     role : {
         type : String,
         enum:['Admin', 'SuperUser', 'User', 'Guest']
@@ -68,12 +54,13 @@ UserSchema.pre('save', function (next) {
     next();
 });
 
-UserSchema.methods.hashpassword = function (password) {
-    return crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha256').toString('base64');
-};
-
-UserSchema.methods.authenticate = function (password) {
-    return this.password === this.hashpassword(password);
+UserSchema.methods = {
+    hashpassword : function (password) {
+        return crypto.pbkdf2Sync(password, this.salt, 10000, 64, 'sha256').toString('base64');
+    },
+    authenticate : function (password) {
+        return this.password === this.hashpassword(password);
+    }
 };
 
 UserSchema.statics.findUniqueUserid = function (userid, suffix, callback) {
