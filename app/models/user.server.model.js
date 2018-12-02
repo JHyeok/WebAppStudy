@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const Schema = mongoose.Schema;
 
+// todo : 유저 생성 시 required 리턴 필요
 const UserSchema = new Schema({
     username : String,
     userid : {
